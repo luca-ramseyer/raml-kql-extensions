@@ -1,0 +1,29 @@
+# Checks every change to catalog.json: the JSON Schema, then each entry's package.
+name: Validate catalog
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  # Also weekly, to catch links that stopped working.
+  schedule:
+    - cron: '17 6 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - run: npm install --no-audit --no-fund
+      - name: Check catalog.json against the JSON Schema
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/luca-ramseyer/raml-kql/main/packages/pack-schema/schemas/rkql-extension-catalog.schema.json -o "$RUNNER_TEMP/schema.json"
+          npx --yes ajv-cli@5 validate --spec=draft2020 --strict=false -s "$RUNNER_TEMP/schema.json" -d catalog.json
+      - name: Check every package
+        run: node scripts/validate.mjs catalog.json

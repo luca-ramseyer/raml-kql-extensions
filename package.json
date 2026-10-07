@@ -1,0 +1,13 @@
+{
+  "name": "raml-kql-extensions",
+  "private": true,
+  "description": "The catalog of extensions listed in Raml KQL's Browse tab.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/validate.mjs"
+  },
+  "dependencies": {
+    "fflate": "0.8.3"
+  }
+}

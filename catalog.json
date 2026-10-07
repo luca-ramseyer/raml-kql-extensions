@@ -1,0 +1,6 @@
+{
+  "$schema": "https://raw.githubusercontent.com/luca-ramseyer/raml-kql/main/packages/pack-schema/schemas/rkql-extension-catalog.schema.json",
+  "schemaVersion": 1,
+  "name": "Raml KQL extensions",
+  "extensions": []
+}

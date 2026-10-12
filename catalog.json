@@ -2,5 +2,58 @@
   "$schema": "https://raw.githubusercontent.com/luca-ramseyer/raml-kql/main/packages/pack-schema/schemas/rkql-extension-catalog.schema.json",
   "schemaVersion": 1,
   "name": "Raml KQL extensions",
-  "extensions": []
+  "extensions": [
+    {
+      "id": "raml.country-map-renderer",
+      "displayName": "Country Map",
+      "publisher": "raml",
+      "description": "Draws the active result as a world map: rows per country, from a country code or name column. The map is bundled; nothing is downloaded.",
+      "categories": [
+        "Visualization"
+      ],
+      "package": "https://github.com/luca-ramseyer/raml-kql/releases/latest/download/country-map-renderer.rkqlx",
+      "repository": "https://github.com/luca-ramseyer/raml-kql/tree/main/examples/extensions/country-map-renderer",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "id": "raml.ipinfo-enricher",
+      "displayName": "IPinfo Enricher",
+      "publisher": "raml",
+      "description": "Look up IP addresses from query results on IPinfo (country, ASN, network owner, and hosting or VPN flags on paid plans), and show the answers as extra columns.",
+      "categories": [
+        "Enrichment"
+      ],
+      "package": "https://github.com/luca-ramseyer/raml-kql/releases/latest/download/ipinfo-enricher.rkqlx",
+      "repository": "https://github.com/luca-ramseyer/raml-kql/tree/main/examples/extensions/ipinfo-enricher",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "id": "raml.teal-theme",
+      "displayName": "Teal Dark",
+      "publisher": "raml",
+      "description": "A dark colour theme with teal accents. An example of a theme-only extension: data, no code, no permissions.",
+      "categories": [
+        "Theme"
+      ],
+      "package": "https://github.com/luca-ramseyer/raml-kql/releases/latest/download/teal-theme.rkqlx",
+      "repository": "https://github.com/luca-ramseyer/raml-kql/tree/main/examples/extensions/teal-theme",
+      "version": "1.0.0",
+      "license": "MIT"
+    },
+    {
+      "id": "raml.virustotal-enricher",
+      "displayName": "VirusTotal Enricher",
+      "publisher": "raml",
+      "description": "Look up IP addresses, domains, URLs and file hashes from query results on VirusTotal, and show the verdicts as extra columns.",
+      "categories": [
+        "Enrichment"
+      ],
+      "package": "https://github.com/luca-ramseyer/raml-kql/releases/latest/download/virustotal-enricher.rkqlx",
+      "repository": "https://github.com/luca-ramseyer/raml-kql/tree/main/examples/extensions/virustotal-enricher",
+      "version": "1.0.0",
+      "license": "MIT"
+    }
+  ]
 }

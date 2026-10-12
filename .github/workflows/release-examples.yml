@@ -1,0 +1,68 @@
+# Builds, signs and publishes the example extensions as a GitHub release of this repository.
+# The catalog links to releases/latest/download/<name>.rkqlx, so every release carries all of
+# them. Run it by hand (Actions → Release examples → Run workflow) after changing an example and
+# bumping its version.
+#
+# Needs, once:
+#   - the `release` environment with the secret EXTENSION_SIGNING_KEY (the Raml KQL extension
+#     signing key, the same one the Raml KQL repository uses), and
+#   - @raml-kql/extension-cli 1.1.0 or newer on npm (the first version with `sign`).
+name: Release examples
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write # create the release
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      RAML_KQL_SIGNING_KEY: ${{ secrets.EXTENSION_SIGNING_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+      - name: Sign and check every package
+        run: |
+          if [ -z "$RAML_KQL_SIGNING_KEY" ]; then
+            echo "::error::EXTENSION_SIGNING_KEY is not set in the release environment."
+            exit 1
+          fi
+          cli="npx --yes @raml-kql/extension-cli@^1.1.0"
+          # The public half of the key, to check each signature before anything is published.
+          node -e "const c=require('node:crypto');process.stdout.write(c.createPublicKey(c.createPrivateKey(process.env.RAML_KQL_SIGNING_KEY)).export({type:'spki',format:'pem'}))" > "$RUNNER_TEMP/signing.pub"
+          for file in dist/*.rkqlx; do
+            $cli sign "$file"
+            $cli verify "$file" --key "$RUNNER_TEMP/signing.pub"
+          done
+          (cd dist && sha256sum *.rkqlx > SHA256SUMS)
+
+      - name: Publish the release
+        run: |
+          tag="examples-$(date -u +%Y-%m-%d)-${GITHUB_RUN_NUMBER}"
+          {
+            echo "The Raml KQL project's example extensions, signed with the project's key."
+            echo
+            echo "| Package | Version |"
+            echo "| --- | --- |"
+            for dir in examples/*/; do
+              name=$(basename "$dir")
+              version=$(node -p "require('./${dir}package.json').version")
+              echo "| \`${name}.rkqlx\` | ${version} |"
+            done
+          } > "$RUNNER_TEMP/notes.md"
+          gh release create "$tag" dist/*.rkqlx dist/SHA256SUMS --target "$GITHUB_SHA" \
+            --title "Example extensions ($tag)" --notes-file "$RUNNER_TEMP/notes.md" --latest

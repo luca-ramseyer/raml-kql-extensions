@@ -1,13 +1,30 @@
 {
   "name": "raml-kql-extensions",
   "private": true,
-  "description": "The catalog of extensions listed in Raml KQL's Browse tab.",
+  "description": "The catalog of extensions listed in Raml KQL's Browse tab, and the project's example extensions.",
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "validate": "node scripts/validate.mjs"
+    "validate": "node scripts/validate.mjs",
+    "build": "node scripts/build-examples.mjs",
+    "typecheck": "tsc -p examples/tsconfig.json",
+    "test": "vitest run"
   },
   "dependencies": {
     "fflate": "0.8.3"
+  },
+  "devDependencies": {
+    "@raml-kql/extension-api": "1.0.0",
+    "@raml-kql/extension-cli": "1.0.0",
+    "@types/geojson": "7946.0.16",
+    "@types/node": "24.19.1",
+    "@types/topojson-client": "3.1.5",
+    "@types/topojson-specification": "1.0.5",
+    "esbuild": "0.28.2",
+    "i18n-iso-countries": "7.14.0",
+    "topojson-client": "3.1.0",
+    "typescript": "6.0.3",
+    "vitest": "5.0.3",
+    "world-atlas": "2.0.2"
   }
 }

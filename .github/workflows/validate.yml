@@ -20,7 +20,7 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-      - run: npm install --no-audit --no-fund
+      - run: npm ci --no-audit --no-fund
       - name: Check catalog.json against the JSON Schema
         run: |
           curl -fsSL https://raw.githubusercontent.com/luca-ramseyer/raml-kql/main/packages/pack-schema/schemas/rkql-extension-catalog.schema.json -o "$RUNNER_TEMP/schema.json"
